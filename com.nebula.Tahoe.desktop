@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.nebula.Tahoe</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <name>Nebula Music</name>
+  <summary>Un reproductor de música ligero y elegante hecho en Qt/C++</summary>
+
+  <description>
+    <p>
+      Nebula Music es un reproductor diseñado para la simplicidad y la velocidad. 
+      Utiliza el poder de TagLib para manejar tus metadatos y Qt6 para una interfaz fluida.
+    </p>
+    <ul>
+      <li>Interfaz minimalista</li>
+      <li>Lectura de etiquetas de audio rápida</li>
+      <li>Soporte nativo para Linux</li>
+    </ul>
+  </description>
+
+  <launchable type="desktop-id">com.nebula.Tahoe.desktop</launchable>
+  <url type="homepage">https://github.com/huancasfrank0-hue/Nebula-Music</url>
+  
+  <provides>
+    <binary>appNebulaTahoe</binary>
+  </provides>
+</component>

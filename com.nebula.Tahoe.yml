@@ -1,0 +1,34 @@
+app-id: com.nebula.Tahoe
+runtime: org.kde.Platform
+runtime-version: '6.6'
+sdk: org.kde.Sdk
+command: appNebulaTahoe
+finish-args:
+  - --share=ipc
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --socket=pulseaudio
+  - --device=dri
+  - --filesystem=home:ro
+  - --filesystem=xdg-music:ro
+
+modules:
+  - name: utf8cpp
+    buildsystem: cmake
+    sources:
+      - type: archive
+        url: https://github.com/nemtrif/utfcpp/archive/refs/tags/v4.0.5.tar.gz
+        sha256: ffc668a310e77607d393f3c18b32715f223da1eac4c4d6e0579a11df8e6b59cf
+
+  - name: taglib
+    buildsystem: cmake
+    sources:
+      - type: archive
+        url: https://taglib.org/releases/taglib-2.0.tar.gz
+        sha256: e36ea877a6370810b97d84cf8f72b1e4ed205149ab3ac8232d44c850f38a2859
+
+  - name: nebula
+    buildsystem: cmake
+    sources:
+      - type: dir
+        path: .
