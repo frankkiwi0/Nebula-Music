@@ -3,31 +3,50 @@ runtime: org.kde.Platform
 runtime-version: '6.6'
 sdk: org.kde.Sdk
 command: appNebulaTahoe
+
 finish-args:
-  - --share=ipc
-  - --socket=fallback-x11
   - --socket=wayland
-  - --socket=pulseaudio
+  - --socket=fallback-x11
   - --device=dri
-  - --filesystem=home:ro
+
+  - --socket=pulseaudio
+
+  - --share=ipc
+  - --own-name=org.mpris.MediaPlayer2.nebula
+  - --talk-name=org.freedesktop.DBus
+  - --talk-name=org.freedesktop.Notifications
+  - --talk-name=org.mpris.MediaPlayer2.Player
+
   - --filesystem=xdg-music:ro
+  - --filesystem=xdg-download:ro
+  - --filesystem=xdg-documents:ro
+  - --filesystem=home:ro
 
 modules:
-  - name: utf8cpp
-    buildsystem: cmake
-    sources:
-      - type: archive
-        url: https://github.com/nemtrif/utfcpp/archive/refs/tags/v4.0.5.tar.gz
-        sha256: ffc668a310e77607d393f3c18b32715f223da1eac4c4d6e0579a11df8e6b59cf
-
   - name: taglib
     buildsystem: cmake
     sources:
       - type: archive
-        url: https://taglib.org/releases/taglib-2.0.tar.gz
-        sha256: e36ea877a6370810b97d84cf8f72b1e4ed205149ab3ac8232d44c850f38a2859
+        url: https://github.com/taglib/taglib/releases/download/v1.13.1/taglib-1.13.1.tar.gz
+        sha256: c8da2b10f1bfec2cd7dbfcd33f4a2338db0765d851a50583d410bacf055cfd0b
 
-  - name: nebula
+  - name: ffmpeg
+    cleanup:
+      - /include
+      - /lib/pkgconfig
+      - /share/doc
+    buildsystem: simple
+    build-commands:
+
+      - ./configure --prefix=/app --enable-static --disable-shared --disable-all --enable-avcodec --enable-avformat --enable-avutil --enable-swscale --enable-ffmpeg --disable-network --disable-debug
+      - make -j$(nproc)
+      - make install
+    sources:
+      - type: archive
+        url: https://ffmpeg.org/releases/ffmpeg-6.1.tar.xz
+        sha256: 488c76e57dd9b9654543593a65b6c3104671df5a703d9357adbd369f544e4962
+
+  - name: nebula-music
     buildsystem: cmake
     sources:
       - type: dir
