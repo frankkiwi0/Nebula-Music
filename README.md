@@ -5,14 +5,16 @@ Reproductor de música minimalista y ultra ligero hecho en C++ y Qt6.
 ![Preview](assets/screenshot.png)
 
 ## ✨ Características
-* 🚀 **Rendimiento:** Solo 228MB de RAM.
-* 🎨 **Diseño:** Interfaz transparente y moderna (Aesthetic).
-* 📂 **Formatos:** Soporte para MP4, M4A y MP3 con metadatos reales.
+* Muy ligero y buen rendimiento
+* 🎨 ** Diseño moderno y minimalista
+* 📂 ** Version V1 con soporte para mp4 y mp3
 
-## 📦 Instalación
-### Método Rápido (Recomendado)
-Descarga el archivo `Nebula_Music.flatpakbundle` desde la sección de **Releases** e instálalo:
-```bash
-flatpak install Nebula_Music.flatpakbundle
-o
-compilalo tu mismo, asegurate de instalar las dependencias : sudo pacman -S cmake gcc qt6-base qt6-declarative qt6-multimedia qt6-multimedia-ffmpeg taglib
+Instalacion mediante compilacion futuro .flatpak para la V2 
+instalacion: Clonar: git clone https://github.com/frankkiwi0/Nebula-Music
+
+Instalar dependencias: --needed base-devel cmake qt6-base qt6-declarative qt6-multimedia taglib ffmpeg
+
+Compilar: mkdir build && cd build
+cmake ..
+make
+./appNebulaTahoe
