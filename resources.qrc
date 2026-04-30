@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>Main.qml</file>
         <file>visualizer/AudioVisualizer.qml</file>
+        <file>assets/default_cover.svg</file>
     </qresource>
 </RCC>

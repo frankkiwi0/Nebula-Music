@@ -1,0 +1,57 @@
+{
+    "app-id": "com.nebula.nebulaV2",
+    "runtime": "org.kde.Platform",
+    "runtime-version": "6.6",
+    "sdk": "org.kde.Sdk",
+    "command": "NebulaMusic",
+    "modules": [
+        {
+            "name": "ffmpeg",
+            "cleanup": [
+                "/include",
+                "/lib/pkgconfig",
+                "/share/doc"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/FFmpeg/FFmpeg.git",
+                    "branch": "release/6.0"
+                }
+            ],
+            "config-opts": [
+                "--enable-shared",
+                "--disable-static",
+                "--disable-doc",
+                "--disable-programs",
+                "--enable-gpl",
+                "--enable-nonfree"
+            ]
+        },
+        {
+            "name": "NebulaMusic",
+            "buildsystem": "cmake-ninja",
+            "sources": [
+                {
+                    "type": "dir",
+                    "path": "."
+                }
+            ]
+        }
+    ],
+    "finish-args": [
+        "--share=ipc",
+        "--socket=fallback-x11",
+        "--socket=wayland",
+        "--socket=pulseaudio",
+        "--share=network",
+        "--device=all",
+        "--filesystem=xdg-music:ro",
+        "--filesystem=home:ro",
+        "--filesystem=xdg-run/PipeWire-0",
+        "--env=QT_MULTIMEDIA_PREFERRED_PLUGINS=ffmpeg",
+        "--talk-name=org.mpris.MediaPlayer2.NebulaMusic",
+        "--own-name=org.mpris.MediaPlayer2.NebulaMusic",
+        "--talk-name=org.freedesktop.Notifications"
+    ]
+}

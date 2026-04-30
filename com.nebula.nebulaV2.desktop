@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Nebula V2
+Comment=Reproductor de música moderno y galáctico
+Exec=NebulaMusic
+Icon=com.nebula.nebulaV2
+Terminal=false
+Categories=AudioVideo;Player;Qt;

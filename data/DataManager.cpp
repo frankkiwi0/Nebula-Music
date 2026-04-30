@@ -16,7 +16,7 @@
 #include <QDebug>
 
 DataManager::DataManager(QObject *parent) : QObject(parent) {
-    m_tempDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/cache";
+    m_tempDir = QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + "/covers";
     QDir().mkpath(m_tempDir);
 }
 
@@ -24,16 +24,14 @@ void DataManager::extractMetadata(const QString &path) {
     QVariantMap metadata;
     QFileInfo fileInfo(path);
     
-  
     QString cleanName = fileInfo.baseName().replace("_", " ").trimmed();
     metadata["title"] = cleanName;
     metadata["artist"] = "Artista Desconocido";
-    metadata["cover"] = "qrc:/assets/default_cover.png"; // Default inicial
+    metadata["cover"] = "qrc:/assets/default_cover.svg";
     metadata["path"] = path;
 
     QString extension = fileInfo.suffix().toLower();
 
-  
     TagLib::FileRef f(path.toStdString().c_str());
     if (!f.isNull() && f.tag()) {
         QString t = QString::fromStdString(f.tag()->title().to8Bit(true)).trimmed();
@@ -42,47 +40,41 @@ void DataManager::extractMetadata(const QString &path) {
         if (!a.isEmpty()) metadata["artist"] = a;
     }
 
-   
     bool coverFound = false;
 
-    // Intento A: TagLib para MP3
     if (extension == "mp3") {
         TagLib::MPEG::File mpegFile(path.toStdString().c_str());
         if (mpegFile.isValid() && mpegFile.ID3v2Tag()) {
             auto list = mpegFile.ID3v2Tag()->frameListMap()["APIC"];
             if (!list.isEmpty()) {
                 auto *pic = static_cast<TagLib::ID3v2::AttachedPictureFrame *>(list.front());
-                QString id3Cover = m_tempDir + "/id3_" + QString::number(QDateTime::currentMSecsSinceEpoch()) + ".jpg";
+                QString id3Cover = m_tempDir + "/id3_temp.jpg";
                 QFile file(id3Cover);
                 if (file.open(QIODevice::WriteOnly)) {
                     file.write(reinterpret_cast<const char*>(pic->picture().data()), pic->picture().size());
                     file.close();
-                    metadata["cover"] = "file://" + id3Cover;
+                    metadata["cover"] = "file://" + id3Cover + "?t=" + QString::number(QDateTime::currentMSecsSinceEpoch());
                     coverFound = true;
                 }
             }
         }
     }
 
-
     if (!coverFound) {
-        cleanCache();
-        QString coverPath = m_tempDir + "/art_" + QString::number(QDateTime::currentMSecsSinceEpoch()) + ".jpg";
+        QString coverPath = m_tempDir + "/ffmpeg_temp.jpg";
         QProcess *ffmpeg = new QProcess();
         QStringList args;
 
-        if (extension == "mp3") {
-    
-            args << "-y" << "-i" << path << "-an" << "-vcodec" << "mjpeg" << "-frames:v" << "1" << coverPath;
+        if (extension == "mp3" || extension == "m4a" || extension == "flac") {
+            args << "-y" << "-i" << path << "-an" << "-vcodec" << "mjpeg" << "-frames:v" << "1" << "-update" << "1" << coverPath;
         } else {
-   
-            args << "-y" << "-ss" << "7" << "-i" << path << "-vframes" << "1" << "-q:v" << "2" << coverPath;
+            args << "-y" << "-ss" << "00:00:02" << "-i" << path << "-vframes" << "1" << "-q:v" << "2" << coverPath;
         }
 
         QObject::connect(ffmpeg, &QProcess::finished, this, [=](int exitCode) {
             QVariantMap finalMeta = metadata;
             if (exitCode == 0 && QFile::exists(coverPath)) {
-                finalMeta["cover"] = "file://" + coverPath;
+                finalMeta["cover"] = "file://" + coverPath + "?t=" + QString::number(QDateTime::currentMSecsSinceEpoch());
             }
             emit metadataReady(finalMeta);
             ffmpeg->deleteLater();
@@ -92,7 +84,6 @@ void DataManager::extractMetadata(const QString &path) {
         emit metadataReady(metadata);
     }
 }
-
 
 void DataManager::cleanCache() {
     QDir dir(m_tempDir);
