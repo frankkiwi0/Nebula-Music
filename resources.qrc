@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Main.qml</file>
+        <file>visualizer/AudioVisualizer.qml</file>
+    </qresource>
+</RCC>
