@@ -11,7 +11,7 @@ Nuevas versiones para : debian (.deb), fedora (.rpm), Universal (flatpak)
 
 Comparte y...... ¡Prueba el proyecto!
 
-Dime que te parece y en que puedo mejorar en Nebula-Music asi podre ir mejorando y puliendo aun mas
+Dime que te parece y en que puedo mejorar en Nebula-Music asi podre ir mejorando y puliendo aun mas, Tambien notificame si hay errores en la App o algunas de sus funciones, incluso errores en paquetes
 
 Futuro (Version V3) : Nuevo visualizador de barras saltarinas, mejora en la extraccion de caractulas y soporte para nuevos formatos, Nuevas version portable: AppImage
 
